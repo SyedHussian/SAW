@@ -1,3 +1,6 @@
+package sawr;
+
+
 public class Dimensions implements Runnable {
 	
 	int steps;
@@ -98,7 +101,7 @@ public class Dimensions implements Runnable {
 			Coordinate c= new Coordinate(0, 0, 0, 0);
 			path.addToPath(c);
 			for (int istep = 1; istep <= this.steps; istep++) {
-				if (path.isDeadEnd3D()) {
+				if (path.isDeadEnd4D()) {
 					pathInDeadEnd = true;
 					break;
 				}
