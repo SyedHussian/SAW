@@ -24,128 +24,13 @@ public class Main {
 				System.out.println("Please enter 2 for 2D, 3 for 3D or 4 for 4D");
 				int dimension = input.nextInt();
 				System.out.println("n\tR^2\t\t\t\tF_SAW");
-				
-					if (dimension == 2) {
-						Thread arrThreads2D[] = new Thread[Globals.N_T];
-			
-						for (int n = 10; n <= Globals.max_steps; n++) {
-		
-							rSquaredSum = new CopyOnWriteArrayList<Double>();
-							N_SAW_TOT = new AtomicInteger();
-							sumOfAverages = 0;
-							
-							for (int i=0; i<Globals.N_T; i++) {
-								Thread t1 = new Thread(new Dimensions(dimension, n));
-								t1.start();
-								arrThreads2D[i] = t1;
-							}
-							for (int i = 0; i < Globals.N_T; i++) {
-								arrThreads2D[i].join();
-							}
-							print(n);
-						}
-					}
-					else if (dimension == 3) {
-						Thread arrThreads3D[] = new Thread[Globals.N_T];
-			
-						for (int n = 10; n <= Globals.max_steps; n++) {
-							rSquaredSum = new CopyOnWriteArrayList<Double>();
-							N_SAW_TOT = new AtomicInteger();
-							sumOfAverages = 0;
-							
-							for (int i=0; i<Globals.N_T; i++) {
-								Thread t1 = new Thread(new Dimensions(dimension, n));
-								t1.start();
-								arrThreads3D[i] = t1;
-							}
-							for (int i = 0; i < Globals.N_T; i++) {
-								arrThreads3D[i].join();
-							}
-							print(n);
-						}
-					}
-					else if (dimension == 4) {
-						Thread arrThreads4D[] = new Thread[Globals.N_T];
-						
-						for (int n = 10; n <= Globals.max_steps; n++) {
-							rSquaredSum = new CopyOnWriteArrayList<Double>();
-							N_SAW_TOT = new AtomicInteger();
-							sumOfAverages = 0;
-							
-							for (int i=0; i<Globals.N_T; i++) {
-								Thread t1 = new Thread(new Dimensions(dimension, n));
-								t1.start();
-								arrThreads4D[i] = t1;
-							}
-							for (int i = 0; i < Globals.N_T; i++) {
-								arrThreads4D[i].join();
-							}
-							print(n);
-						}
-					}
+				calDimension(dimension);
 			}
 			else if (choice.equalsIgnoreCase("p")) {
 				System.out.println("Please enter 2 for 2D Polygon, 3 for 3D Polygon or 4 for 4D Polygon");
 				int dimension = input.nextInt();
 				System.out.println("n\tF_SAW");
-				
-					if (dimension == 2) {
-						Thread arrThreads5D[] = new Thread[Globals.N_T];
-						
-						for (int n = 2; n <= Globals.max_steps; ) {
-							N_SAW_TOT = new AtomicInteger();
-							sumOfAverages = 0;
-							
-							for (int i=0; i<Globals.N_T; i++) {
-								Thread t1 = new Thread(new Polygon(dimension, n));
-								t1.start();
-								arrThreads5D[i] = t1;
-							}
-							for (int i = 0; i < Globals.N_T; i++) {
-								arrThreads5D[i].join();
-							}
-							printPoly(n);
-							n +=2;
-						}
-					}
-					else if (dimension == 3) {
-						Thread arrThreads5D[] = new Thread[Globals.N_T];
-						
-						for (int n = 2; n <= Globals.max_steps; ) {
-							N_SAW_TOT = new AtomicInteger();
-							sumOfAverages = 0;
-							
-							for (int i=0; i<Globals.N_T; i++) {
-								Thread t1 = new Thread(new Polygon(dimension, n));
-								t1.start();
-								arrThreads5D[i] = t1;
-							}
-							for (int i = 0; i < Globals.N_T; i++) {
-								arrThreads5D[i].join();
-							}
-							printPoly(n);
-							n +=2;
-						}
-					}
-					else if (dimension == 4) {
-						Thread arrThreads5D[] = new Thread[Globals.N_T];
-						
-						for (int n = 2; n <= Globals.max_steps; ) {
-							N_SAW_TOT = new AtomicInteger();
-							sumOfAverages = 0;
-							
-							for (int i=0; i<Globals.N_T; i++) {
-								Thread t1 = new Thread(new Polygon(dimension, n));
-								t1.start();
-								arrThreads5D[i] = t1;
-							}
-							for (int i = 0; i < Globals.N_T; i++) {
-								arrThreads5D[i].join();
-							}
-							printPoly(n);
-							n +=2;
-						}
-					}
+				calPolyDimension(dimension);
 			}
 			System.out.println("Enter y to continue: ");
 			String st = input.next();
@@ -155,7 +40,43 @@ public class Main {
 		}
 		input.close();
 	}
-
+	
+	public static void calDimension (int dimension) throws InterruptedException {
+		Thread arrThreads[] = new Thread[Globals.N_T];
+		for (int n = 10; n <= Globals.max_steps; n++) {
+			rSquaredSum = new CopyOnWriteArrayList<Double>();
+			N_SAW_TOT = new AtomicInteger();
+			sumOfAverages = 0;
+			for (int i=0; i<Globals.N_T; i++) {
+				Thread t1 = new Thread(new Dimensions(dimension, n));
+				t1.start();
+				arrThreads[i] = t1;
+			}
+			for (int i = 0; i < Globals.N_T; i++) {
+				arrThreads[i].join();
+			}
+			print(n);
+		}
+	}
+	
+	public static void calPolyDimension (int dimension) throws InterruptedException {
+		Thread arrThreads[] = new Thread[Globals.N_T];
+		for (int n = 2; n <= Globals.max_steps; ) {
+			N_SAW_TOT = new AtomicInteger();
+			sumOfAverages = 0;
+			for (int i=0; i<Globals.N_T; i++) {
+				Thread t1 = new Thread(new Polygon(dimension, n));
+				t1.start();
+				arrThreads[i] = t1;
+			}
+			for (int i = 0; i < Globals.N_T; i++) {
+				arrThreads[i].join();
+			}
+			printPoly(n);
+			n +=2;
+		}
+	}
+	
 	public static void print(int n) {
 		rSquaredSum.forEach(a -> sumOfAverages += a);
 		rsqavg = sumOfAverages/ N_SAW_TOT.doubleValue();
